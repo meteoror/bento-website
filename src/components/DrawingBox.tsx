@@ -107,7 +107,7 @@ const DrawingBox: React.FC<DrawingBoxProps> = ({ onDrawingSaved }) => {
     setLastPos(null);
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -115,25 +115,16 @@ const DrawingBox: React.FC<DrawingBoxProps> = ({ onDrawingSaved }) => {
 
     try {
       const dataUrl = canvas.toDataURL('image/png');
-      
-      // Save to localStorage (will be replaced with server-side later)
-      const drawings = JSON.parse(localStorage.getItem('bento-drawings') || '[]');
-      drawings.push({
-        id: `drawing-${Date.now()}`,
-        dataUrl,
-        timestamp: new Date().toISOString(),
+
+      await fetch('/api/upload-drawing', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ imageBase64: dataUrl }),
       });
-      localStorage.setItem('bento-drawings', JSON.stringify(drawings));
-      
-      // Trigger download
-      const link = document.createElement('a');
-      link.download = `drawing-${Date.now()}.png`;
-      link.href = dataUrl;
-      link.click();
-      
-      onDrawingSaved('Drawing saved!');
-    } catch (error: any) {
-      onDrawingSaved(`Error: ${error.message}`);
+
+      onDrawingSaved('Drawing sent!');
+    } catch {
+      onDrawingSaved('Error sending drawing');
     } finally {
       setIsSaving(false);
     }
