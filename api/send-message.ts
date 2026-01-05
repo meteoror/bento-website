@@ -10,20 +10,32 @@ export default async function handler(
   }
 
   try {
-    // Body is already parsed with VercelRequest
     const { message } = req.body;
 
     if (!message || typeof message !== 'string') {
       return res.status(400).json({ error: 'Message is required' });
     }
 
+    // Create formatted date for filename
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+    const milliseconds = String(now.getMilliseconds()).padStart(3, '0');
+
+    // Format: messages/YYYY-MM-DD/HH-MM-SS-message.json
+    const timestamp = `${year}-${month}-${day}_${hours}-${minutes}-${seconds}`;
+    
     const content = JSON.stringify({
       message,
-      timestamp: new Date().toISOString(),
+      timestamp: now.toISOString(),
     });
 
     const blob = await put(
-      `messages/message-${Date.now()}.json`,
+      `messages/${year}/${month}/${year}-${month}-${day}_${hours}-${minutes}-${seconds}-${milliseconds}.json`,
       content,
       { 
         access: 'public',

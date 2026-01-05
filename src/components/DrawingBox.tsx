@@ -59,25 +59,25 @@ const DrawingBox: React.FC<DrawingBoxProps> = ({ onDrawingSaved }) => {
     ctx.strokeStyle = brushColor;
   }, [brushSize, brushColor]);
 
-  const getCanvasCoordinates = (e: React.MouseEvent<HTMLCanvasElement>) => {
+  const getCanvasCoordinates = (clientX: number, clientY: number) => {
     const canvas = canvasRef.current;
     if (!canvas) return { x: 0, y: 0 };
     
     const rect = canvas.getBoundingClientRect();
     return {
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top
+      x: clientX - rect.left,
+      y: clientY - rect.top
     };
   };
 
-  const startDrawing = (e: React.MouseEvent<HTMLCanvasElement>) => {
+  const startDrawing = (clientX: number, clientY: number) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const { x, y } = getCanvasCoordinates(e);
+    const { x, y } = getCanvasCoordinates(clientX, clientY);
     
     ctx.beginPath();
     ctx.moveTo(x, y);
@@ -85,14 +85,14 @@ const DrawingBox: React.FC<DrawingBoxProps> = ({ onDrawingSaved }) => {
     setLastPos({ x, y });
   };
 
-  const draw = (e: React.MouseEvent<HTMLCanvasElement>) => {
+  const draw = (clientX: number, clientY: number) => {
     if (!isDrawing || !canvasRef.current || !lastPos) return;
 
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const { x, y } = getCanvasCoordinates(e);
+    const { x, y } = getCanvasCoordinates(clientX, clientY);
     
     ctx.beginPath();
     ctx.moveTo(lastPos.x, lastPos.y);
@@ -105,6 +105,35 @@ const DrawingBox: React.FC<DrawingBoxProps> = ({ onDrawingSaved }) => {
   const stopDrawing = () => {
     setIsDrawing(false);
     setLastPos(null);
+  };
+
+  // Mouse event handlers
+  const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    startDrawing(e.clientX, e.clientY);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    if (!isDrawing) return;
+    draw(e.clientX, e.clientY);
+  };
+
+  // Touch event handlers
+  const handleTouchStart = (e: React.TouchEvent<HTMLCanvasElement>) => {
+    e.preventDefault(); // Prevent scrolling and highlighting
+    const touch = e.touches[0];
+    startDrawing(touch.clientX, touch.clientY);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent<HTMLCanvasElement>) => {
+    e.preventDefault(); // Prevent scrolling
+    if (!isDrawing) return;
+    const touch = e.touches[0];
+    draw(touch.clientX, touch.clientY);
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent<HTMLCanvasElement>) => {
+    e.preventDefault(); // Prevent tap highlight
+    stopDrawing();
   };
 
   const handleSave = async () => {
@@ -150,17 +179,26 @@ const DrawingBox: React.FC<DrawingBoxProps> = ({ onDrawingSaved }) => {
       <div 
         ref={containerRef} 
         className="canvas-container mb-3"
-        style={{ minHeight: '300px' }}
+        style={{ 
+          minHeight: '300px',
+          touchAction: 'none' // Prevent browser touch actions
+        }}
       >
         <canvas
           ref={canvasRef}
-          onMouseDown={startDrawing}
-          onMouseMove={draw}
+          // Mouse events
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
           onMouseUp={stopDrawing}
           onMouseLeave={stopDrawing}
+          // Touch events
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+          onTouchCancel={handleTouchEnd}
           style={{
             cursor: 'crosshair',
-            touchAction: 'none',
+            touchAction: 'none', // Prevent default touch behaviors
             width: '100%',
             height: '100%',
             display: 'block'
