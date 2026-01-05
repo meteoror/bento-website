@@ -1,24 +1,40 @@
 import { put } from '@vercel/blob';
+import type { VercelRequest, VercelResponse } from '@vercel/node';
 
-export default async function handler(req: Request) {
+export default async function handler(
+  req: VercelRequest,
+  res: VercelResponse
+) {
   if (req.method !== 'POST') {
-    return new Response('Method not allowed', { status: 405 });
+    return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { message } = await req.json();
+  try {
+    // Body is already parsed with VercelRequest
+    const { message } = req.body;
 
-  const content = JSON.stringify({
-    message,
-    timestamp: new Date().toISOString(),
-  });
+    if (!message || typeof message !== 'string') {
+      return res.status(400).json({ error: 'Message is required' });
+    }
 
-  const blob = await put(
-    `messages/message-${Date.now()}.json`,
-    content,
-    { access: 'public' }
-  );
+    const content = JSON.stringify({
+      message,
+      timestamp: new Date().toISOString(),
+    });
 
-  return new Response(JSON.stringify({ url: blob.url }), {
-    headers: { 'Content-Type': 'application/json' },
-  });
+    const blob = await put(
+      `messages/message-${Date.now()}.json`,
+      content,
+      { 
+        access: 'public',
+        contentType: 'application/json'
+      }
+    );
+
+    return res.status(200).json({ url: blob.url });
+    
+  } catch (error) {
+    console.error('Error uploading message:', error);
+    return res.status(500).json({ error: 'Failed to save message' });
+  }
 }
