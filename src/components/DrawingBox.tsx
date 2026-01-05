@@ -1,6 +1,6 @@
+// src/components/DrawingBox.tsx
 import React, { useState, useRef, useEffect } from 'react';
 import BentoBox from './BentoBox';
-import './DrawingBox.css';
 
 interface DrawingBoxProps {
   gridArea: string;

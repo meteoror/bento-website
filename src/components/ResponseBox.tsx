@@ -1,3 +1,4 @@
+// src/components/ResponseBox.tsx
 import React, { useState } from 'react';
 import BentoBox from './BentoBox';
 

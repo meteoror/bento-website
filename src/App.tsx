@@ -1,107 +1,138 @@
-import React, { useState, useEffect } from 'react';
-import { generateRandomLayout, getGifUrls, BentoItem } from './utils/layoutRandomizer';
-import ParagraphBox from './components/ParagraphBox';
-import ResponseBox from './components/ResponseBox';
-import DrawingBox from './components/DrawingBox';
-import GifBox from './components/GifBox';
+import React from 'react';
 import './styles.css';
 
-function App() {
-  const [layout, setLayout] = useState<BentoItem[]>([]);
-  const [gifUrls, setGifUrls] = useState<string[]>([]);
-  const [statusMessage, setStatusMessage] = useState('');
-  const [greeting] = useState("Welcome to Bento Space");
-  const [subtitle] = useState("A dynamic, interactive grid where creativity meets technology");
-
-  useEffect(() => {
-    // Generate initial random layout
-    const newLayout = generateRandomLayout();
-    setLayout(newLayout);
-    
-    // Get random GIFs
-    const urls = getGifUrls();
-    setGifUrls(urls);
-  }, []);
-
-  useEffect(() => {
-    // Clear status message after 3 seconds
-    if (statusMessage) {
-      const timer = setTimeout(() => setStatusMessage(''), 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [statusMessage]);
-
-  const handleMessageSent = (message: string) => {
-    setStatusMessage(message);
-  };
-
-  const handleDrawingSaved = (message: string) => {
-    setStatusMessage(message);
-  };
-
-  // Separate boxes by type for rendering
-  const paragraphBoxes = layout.filter(box => box.type === 'paragraph');
-  const gifBoxes = layout.filter(box => box.type === 'gif');
-  const responseBox = layout.find(box => box.type === 'response');
-  const drawingBox = layout.find(box => box.type === 'drawing');
-
+const App: React.FC = () => {
   return (
-    <div className="App">
-      {/* Header */}
-      <header className="header">
-        <h1>{greeting}</h1>
-        <p className="subtitle">{subtitle}</p>
-      </header>
-
-      {/* Bento Grid */}
-      <div className="bento-grid">
-        {/* Render Paragraph Boxes */}
-        {paragraphBoxes.map((box, index) => (
-          <ParagraphBox
-            key={box.id}
-            gridArea={box.gridArea}
-            content={box.size === 'large' 
-              ? "This is a larger paragraph area. It can accommodate more text and provide detailed information or stories. The bento layout ensures that each element has its own space while contributing to the overall harmony of the design. Refresh the page to see how everything rearranges itself randomly!" 
-              : undefined}
+    <div style={{ 
+      minHeight: '100vh',
+      padding: '20px',
+      background: '#0a0a0a',
+      color: '#f0f0f0'
+    }}>
+      <h1 style={{ 
+        color: '#00ff88',
+        textAlign: 'center',
+        marginBottom: '20px'
+      }}>
+        Bento Website Test
+      </h1>
+      
+      <div style={{ 
+        display: 'grid',
+        gridTemplateColumns: 'repeat(4, 1fr)',
+        gap: '15px',
+        maxWidth: '1200px',
+        margin: '0 auto'
+      }}>
+        {/* Test Box 1 */}
+        <div style={{
+          background: '#151515',
+          borderRadius: '16px',
+          padding: '20px',
+          gridColumn: 'span 1',
+          border: '1px solid rgba(0, 255, 136, 0.2)'
+        }}>
+          <h3 style={{ color: '#00ff88' }}>Paragraph</h3>
+          <p style={{ color: '#888' }}>This is a test paragraph box.</p>
+        </div>
+        
+        {/* Test Box 2 */}
+        <div style={{
+          background: '#151515',
+          borderRadius: '16px',
+          padding: '20px',
+          gridColumn: 'span 1',
+          border: '1px solid rgba(0, 255, 136, 0.2)'
+        }}>
+          <h3 style={{ color: '#00ff88' }}>Response</h3>
+          <textarea 
+            style={{
+              width: '100%',
+              background: 'rgba(255,255,255,0.05)',
+              border: '1px solid rgba(0,255,136,0.1)',
+              color: '#f0f0f0',
+              padding: '10px',
+              borderRadius: '8px'
+            }}
+            placeholder="Type something..."
           />
-        ))}
-
-        {/* Render Response Box */}
-        {responseBox && (
-          <ResponseBox
-            key={responseBox.id}
-            gridArea={responseBox.gridArea}
-            onMessageSent={handleMessageSent}
-          />
-        )}
-
-        {/* Render Drawing Box */}
-        {drawingBox && (
-          <DrawingBox
-            key={drawingBox.id}
-            gridArea={drawingBox.gridArea}
-            onDrawingSaved={handleDrawingSaved}
-          />
-        )}
-
-        {/* Render GIF Boxes */}
-        {gifBoxes.map((box, index) => (
-          <GifBox
-            key={box.id}
-            gridArea={box.gridArea}
-            gifUrl={gifUrls[index]}
-          />
+        </div>
+        
+        {/* Test Box 3 */}
+        <div style={{
+          background: '#151515',
+          borderRadius: '16px',
+          padding: '20px',
+          gridColumn: 'span 2',
+          border: '1px solid rgba(0, 255, 136, 0.2)'
+        }}>
+          <h3 style={{ color: '#00ff88' }}>Drawing Area</h3>
+          <div style={{
+            height: '150px',
+            background: 'rgba(255,255,255,0.05)',
+            borderRadius: '8px',
+            border: '1px dashed rgba(0,255,136,0.3)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: '#888'
+          }}>
+            Drawing canvas would go here
+          </div>
+        </div>
+        
+        {/* Test Box 4 */}
+        <div style={{
+          background: '#151515',
+          borderRadius: '16px',
+          padding: '20px',
+          gridColumn: 'span 1',
+          border: '1px solid rgba(0, 255, 136, 0.2)'
+        }}>
+          <h3 style={{ color: '#00ff88' }}>GIF</h3>
+          <div style={{
+            height: '120px',
+            background: 'linear-gradient(45deg, #00ff88, #0088ff)',
+            borderRadius: '8px',
+            opacity: '0.5'
+          }} />
+        </div>
+        
+        {/* More test boxes */}
+        {[5, 6, 7, 8].map(num => (
+          <div key={num} style={{
+            background: '#151515',
+            borderRadius: '16px',
+            padding: '20px',
+            border: '1px solid rgba(0, 255, 136, 0.1)'
+          }}>
+            <h4 style={{ color: '#00ff88' }}>Box {num}</h4>
+            <p style={{ color: '#888', fontSize: '0.9rem' }}>
+              Content for box {num}
+            </p>
+          </div>
         ))}
       </div>
-
-      {/* Status Message */}
-      {statusMessage && (
-        <div className="status-message">
-          {statusMessage}
-        </div>
-      )}
+      
+      {/* Debug info at bottom */}
+      <div style={{
+        position: 'fixed',
+        bottom: '10px',
+        left: '10px',
+        background: 'rgba(0,0,0,0.8)',
+        color: '#00ff88',
+        padding: '10px',
+        borderRadius: '8px',
+        fontSize: '12px',
+        border: '1px solid rgba(0,255,136,0.3)'
+      }}>
+        <div><strong>Debug Info</strong></div>
+        <div>Background: {getComputedStyle(document.body).backgroundColor}</div>
+        <div>Text Color: {getComputedStyle(document.body).color}</div>
+        <div>CSS Loaded: Yes</div>
+      </div>
     </div>
   );
-}
+};
 
 export default App;

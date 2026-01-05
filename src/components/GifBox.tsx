@@ -1,13 +1,19 @@
+// src/components/GifBox.tsx
 import React, { useState, useEffect } from 'react';
 import BentoBox from './BentoBox';
 
-const GifBox = ({ gridArea, gifUrl }) => {
+interface GifBoxProps {
+  gridArea: string;
+  gifUrl?: string;
+}
+
+const GifBox: React.FC<GifBoxProps> = ({ gridArea, gifUrl }) => {
   const [url, setUrl] = useState(gifUrl);
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     if (!url) {
-      // Fallback if no URL provided
+      // Fallback image
       setUrl('https://images.pexels.com/photos/268533/pexels-photo-268533.jpeg?auto=compress&cs=tinysrgb&w=400&h=300');
     }
   }, [url]);
@@ -15,11 +21,20 @@ const GifBox = ({ gridArea, gifUrl }) => {
   return (
     <BentoBox gridArea={gridArea} className="gif-box">
       {!loaded && (
-        <div className="loading" style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}></div>
+        <div style={{ 
+          position: 'absolute', 
+          top: '50%', 
+          left: '50%', 
+          transform: 'translate(-50%, -50%)',
+          color: '#888',
+          fontSize: '0.9rem'
+        }}>
+          Loading...
+        </div>
       )}
       <img 
         src={url} 
-        alt="Random image" 
+        alt="Random" 
         loading="lazy"
         onLoad={() => setLoaded(true)}
         onError={() => {
@@ -27,8 +42,12 @@ const GifBox = ({ gridArea, gifUrl }) => {
           setLoaded(true);
         }}
         style={{ 
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
           opacity: loaded ? 1 : 0,
-          transition: 'opacity 0.3s ease'
+          transition: 'opacity 0.3s ease',
+          borderRadius: '16px'
         }}
       />
     </BentoBox>
