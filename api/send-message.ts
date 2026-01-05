@@ -15,7 +15,7 @@ export default async function handler(req: Request) {
   const blob = await put(
     `messages/message-${Date.now()}.json`,
     content,
-    { access: 'private' }
+    { access: 'public' }
   );
 
   return new Response(JSON.stringify({ url: blob.url }), {
