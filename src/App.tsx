@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { generateRandomLayout, getGifUrls } from './utils/layoutRandomizer';
+import { generateRandomLayout, getGifUrls, BentoItem } from './utils/layoutRandomizer';
 import ParagraphBox from './components/ParagraphBox';
 import ResponseBox from './components/ResponseBox';
 import DrawingBox from './components/DrawingBox';
 import GifBox from './components/GifBox';
+import './styles.css';
 
 function App() {
-  const [layout, setLayout] = useState([]);
-  const [gifUrls, setGifUrls] = useState([]);
+  const [layout, setLayout] = useState<BentoItem[]>([]);
+  const [gifUrls, setGifUrls] = useState<string[]>([]);
   const [statusMessage, setStatusMessage] = useState('');
   const [greeting] = useState("Welcome to Bento Space");
   const [subtitle] = useState("A dynamic, interactive grid where creativity meets technology");
@@ -30,11 +31,11 @@ function App() {
     }
   }, [statusMessage]);
 
-  const handleMessageSent = (message) => {
+  const handleMessageSent = (message: string) => {
     setStatusMessage(message);
   };
 
-  const handleDrawingSaved = (message) => {
+  const handleDrawingSaved = (message: string) => {
     setStatusMessage(message);
   };
 
@@ -57,7 +58,7 @@ function App() {
         {/* Render Paragraph Boxes */}
         {paragraphBoxes.map((box, index) => (
           <ParagraphBox
-            key={`paragraph-${box.id}`}
+            key={box.id}
             gridArea={box.gridArea}
             content={box.size === 'large' 
               ? "This is a larger paragraph area. It can accommodate more text and provide detailed information or stories. The bento layout ensures that each element has its own space while contributing to the overall harmony of the design. Refresh the page to see how everything rearranges itself randomly!" 
@@ -68,7 +69,7 @@ function App() {
         {/* Render Response Box */}
         {responseBox && (
           <ResponseBox
-            key={`response-${responseBox.id}`}
+            key={responseBox.id}
             gridArea={responseBox.gridArea}
             onMessageSent={handleMessageSent}
           />
@@ -77,7 +78,7 @@ function App() {
         {/* Render Drawing Box */}
         {drawingBox && (
           <DrawingBox
-            key={`drawing-${drawingBox.id}`}
+            key={drawingBox.id}
             gridArea={drawingBox.gridArea}
             onDrawingSaved={handleDrawingSaved}
           />
@@ -86,7 +87,7 @@ function App() {
         {/* Render GIF Boxes */}
         {gifBoxes.map((box, index) => (
           <GifBox
-            key={`gif-${box.id}`}
+            key={box.id}
             gridArea={box.gridArea}
             gifUrl={gifUrls[index]}
           />

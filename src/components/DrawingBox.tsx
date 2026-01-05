@@ -1,221 +1,194 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { ReactSketchCanvas, ReactSketchCanvasRef } from '@pshihn/react-sketch-canvas';
 import BentoBox from './BentoBox';
-import './DrawingBox.css'; // Optional styling
+import './DrawingBox.css';
 
 interface DrawingBoxProps {
   gridArea: string;
   onDrawingSaved: (message: string) => void;
 }
 
-interface DrawingTools {
-  color: string;
-  strokeWidth: number;
-}
-
 const DrawingBox: React.FC<DrawingBoxProps> = ({ gridArea, onDrawingSaved }) => {
-  const canvasRef = useRef<ReactSketchCanvasRef>(null);
-  const [tools, setTools] = useState<DrawingTools>({
-    color: '#00ff88',
-    strokeWidth: 3
-  });
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [isDrawing, setIsDrawing] = useState(false);
+  const [brushColor, setBrushColor] = useState('#00ff88');
+  const [brushSize, setBrushSize] = useState(3);
   const [isSaving, setIsSaving] = useState(false);
-  const [canvasSize, setCanvasSize] = useState({ width: 300, height: 200 });
 
-  // Handle responsive canvas size
+  // Initialize canvas
   useEffect(() => {
-    const updateSize = () => {
-      const box = document.querySelector('.drawing-box');
-      if (box) {
-        const { width, height } = box.getBoundingClientRect();
-        setCanvasSize({
-          width: width - 32, // Account for padding
-          height: height - 120 // Account for header and buttons
-        });
-      }
-    };
+    const canvas = canvasRef.current;
+    if (!canvas) return;
 
-    updateSize();
-    window.addEventListener('resize', updateSize);
-    return () => window.removeEventListener('resize', updateSize);
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    // Set canvas size
+    const dpr = window.devicePixelRatio || 1;
+    const rect = canvas.getBoundingClientRect();
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    ctx.scale(dpr, dpr);
+
+    // Set initial background
+    ctx.fillStyle = 'transparent';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
   }, []);
 
-  const handleSave = async () => {
-    if (!canvasRef.current) return;
+  const startDrawing = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    setIsDrawing(true);
+  };
+
+  const draw = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    if (!isDrawing || !canvasRef.current) return;
+
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    ctx.lineTo(x, y);
+    ctx.strokeStyle = brushColor;
+    ctx.lineWidth = brushSize;
+    ctx.stroke();
+  };
+
+  const stopDrawing = () => {
+    setIsDrawing(false);
+  };
+
+  const handleSave = () => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
 
     setIsSaving(true);
-    
+
     try {
-      // Get drawing as data URL
-      const dataUrl = await canvasRef.current.exportImage('png');
+      // Convert canvas to data URL
+      const dataUrl = canvas.toDataURL('image/png');
       
-      const response = await fetch('/api/save-drawing', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          image: dataUrl,
-          timestamp: new Date().toISOString(),
-        }),
+      // Save to localStorage for now
+      const drawings = JSON.parse(localStorage.getItem('bento-drawings') || '[]');
+      drawings.push({
+        id: `drawing-${Date.now()}`,
+        dataUrl,
+        timestamp: new Date().toISOString(),
       });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        if (onDrawingSaved) {
-          onDrawingSaved('Drawing saved successfully!');
-        }
-      } else {
-        throw new Error(data.error || 'Failed to save drawing');
-      }
-    } catch (error) {
-      console.error('Error saving drawing:', error);
-      if (onDrawingSaved) {
-        onDrawingSaved(error.message || 'Failed to save drawing. Please try again.');
-      }
+      localStorage.setItem('bento-drawings', JSON.stringify(drawings));
+      
+      onDrawingSaved('Drawing saved locally! Check localStorage in DevTools.');
+    } catch (error: any) {
+      onDrawingSaved(`Error: ${error.message}`);
     } finally {
       setIsSaving(false);
     }
   };
 
   const handleClear = () => {
-    if (canvasRef.current) {
-      canvasRef.current.clearCanvas();
-    }
-  };
+    const canvas = canvasRef.current;
+    if (!canvas) return;
 
-  const handleUndo = () => {
-    if (canvasRef.current) {
-      canvasRef.current.undo();
-    }
-  };
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
 
-  const handleRedo = () => {
-    if (canvasRef.current) {
-      canvasRef.current.redo();
-    }
-  };
-
-  const handleColorChange = (color: string) => {
-    setTools(prev => ({ ...prev, color }));
-  };
-
-  const handleStrokeWidthChange = (width: number) => {
-    setTools(prev => ({ ...prev, strokeWidth: Math.max(1, width) }));
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
   };
 
   return (
     <BentoBox gridArea={gridArea} className="drawing-box">
-      <div className="drawing-header">
+      <div className="d-flex justify-content-between align-items-center mb-3">
         <h5 style={{ color: 'var(--accent-green)', margin: 0 }}>
           Create Art
         </h5>
-        <div className="drawing-stats">
-          <small style={{ color: 'var(--text-secondary)' }}>
-            Draw freely!
-          </small>
-        </div>
-      </div>
-
-      {/* Drawing Tools */}
-      <div className="drawing-tools">
-        <div className="color-palette">
-          {['#00ff88', '#ff0088', '#0088ff', '#ffff00', '#ffffff', '#000000'].map(color => (
-            <button
-              key={color}
-              className={`color-btn ${tools.color === color ? 'active' : ''}`}
-              style={{ backgroundColor: color }}
-              onClick={() => handleColorChange(color)}
-              title={`Color: ${color}`}
-            />
-          ))}
-        </div>
-        
-        <div className="stroke-controls">
+        <div className="drawing-tools">
+          <input
+            type="color"
+            value={brushColor}
+            onChange={(e) => setBrushColor(e.target.value)}
+            className="color-picker"
+            title="Brush Color"
+          />
           <button
-            onClick={() => handleStrokeWidthChange(tools.strokeWidth - 1)}
-            className="btn-control"
-            disabled={tools.strokeWidth <= 1}
+            onClick={() => setBrushSize(prev => Math.max(1, prev - 1))}
+            className="btn-sm"
           >
             −
           </button>
-          <div className="stroke-indicator">
-            <div 
-              className="stroke-preview"
-              style={{
-                backgroundColor: tools.color,
-                width: `${tools.strokeWidth * 4}px`,
-                height: `${tools.strokeWidth * 4}px`
-              }}
-            />
-            <span style={{ color: 'var(--text-secondary)', marginLeft: '8px' }}>
-              {tools.strokeWidth}px
-            </span>
-          </div>
+          <span style={{ color: 'var(--text-secondary)', padding: '0 0.5rem' }}>
+            {brushSize}px
+          </span>
           <button
-            onClick={() => handleStrokeWidthChange(tools.strokeWidth + 1)}
-            className="btn-control"
+            onClick={() => setBrushSize(prev => prev + 1)}
+            className="btn-sm"
           >
             +
           </button>
         </div>
       </div>
 
-      {/* Canvas */}
       <div className="canvas-container">
-        <ReactSketchCanvas
+        <canvas
           ref={canvasRef}
-          width={canvasSize.width}
-          height={canvasSize.height}
-          strokeWidth={tools.strokeWidth}
-          strokeColor={tools.color}
-          canvasColor="transparent"
+          onMouseDown={startDrawing}
+          onMouseMove={draw}
+          onMouseUp={stopDrawing}
+          onMouseLeave={stopDrawing}
           style={{
+            width: '100%',
+            height: '300px',
+            background: 'rgba(255, 255, 255, 0.05)',
             border: '1px solid rgba(0, 255, 136, 0.2)',
             borderRadius: '8px',
-            background: 'rgba(255, 255, 255, 0.05)'
+            cursor: 'crosshair',
+            touchAction: 'none'
           }}
-          withViewBox={true}
         />
       </div>
 
-      {/* Action Buttons */}
-      <div className="drawing-actions">
-        <button
-          onClick={handleUndo}
-          className="btn-action"
-          title="Undo"
-        >
-          <span>↶</span>
-        </button>
-        <button
-          onClick={handleRedo}
-          className="btn-action"
-          title="Redo"
-        >
-          <span>↷</span>
-        </button>
+      <div className="d-flex justify-content-between mt-3">
         <button
           onClick={handleClear}
-          className="btn-action"
-          title="Clear Canvas"
+          className="btn-sm"
+          style={{
+            background: 'rgba(255, 255, 255, 0.1)',
+            border: '1px solid rgba(255, 255, 255, 0.2)',
+            color: 'var(--text-primary)',
+            padding: '0.5rem 1rem',
+            borderRadius: '6px'
+          }}
         >
-          <span>🗑️</span>
+          Clear Canvas
         </button>
         <button
           onClick={handleSave}
           disabled={isSaving}
-          className="btn-save"
+          style={{
+            background: 'linear-gradient(135deg, var(--accent-green) 0%, #00cc6a 100%)',
+            border: 'none',
+            color: '#000',
+            padding: '0.5rem 1.5rem',
+            borderRadius: '6px',
+            fontWeight: '600',
+            cursor: 'pointer'
+          }}
         >
-          {isSaving ? (
-            <>
-              <span className="spinner"></span>
-              Saving...
-            </>
-          ) : (
-            'Save Drawing'
-          )}
+          {isSaving ? 'Saving...' : 'Save Drawing'}
         </button>
       </div>
     </BentoBox>
