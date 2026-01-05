@@ -15,19 +15,15 @@ const ResponseBox: React.FC<ResponseBoxProps> = ({ onMessageSent }) => {
     setIsSubmitting(true);
     
     try {
-      const response = await fetch('/api/messages', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ message: message.trim() }),
+      // Save to localStorage (will be replaced with server-side later)
+      const messages = JSON.parse(localStorage.getItem('bento-messages') || '[]');
+      messages.push({
+        id: `msg-${Date.now()}`,
+        message: message.trim(),
+        timestamp: new Date().toISOString(),
       });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || 'Failed to save message');
-      }
-
+      localStorage.setItem('bento-messages', JSON.stringify(messages));
+      
       setMessage('');
       onMessageSent('Message saved!');
     } catch (error: any) {
