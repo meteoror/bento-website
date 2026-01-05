@@ -26,20 +26,16 @@ export default async function handler(
     const seconds = String(now.getSeconds()).padStart(2, '0');
     const milliseconds = String(now.getMilliseconds()).padStart(3, '0');
 
-    // Format: messages/YYYY-MM-DD/HH-MM-SS-message.json
-    const timestamp = `${year}-${month}-${day}_${hours}-${minutes}-${seconds}`;
-    
-    const content = JSON.stringify({
-      message,
-      timestamp: now.toISOString(),
-    });
+    // Create content with timestamp and message
+    const content = `Timestamp: ${now.toISOString()}\n\nMessage:\n${message}`;
 
+    // Change filename to .txt and content type to text/plain
     const blob = await put(
-      `messages/${year}/${month}/${year}-${month}-${day}_${hours}-${minutes}-${seconds}-${milliseconds}.json`,
+      `messages/${year}/${month}/${year}-${month}-${day}_${hours}-${minutes}-${seconds}-${milliseconds}.txt`,
       content,
       { 
         access: 'public',
-        contentType: 'application/json'
+        contentType: 'text/plain'  // Changed from application/json
       }
     );
 
