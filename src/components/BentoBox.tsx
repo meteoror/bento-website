@@ -1,4 +1,3 @@
-// src/components/BentoBox.tsx
 import React, { ReactNode } from 'react';
 
 interface BentoBoxProps {

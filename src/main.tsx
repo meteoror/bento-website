@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import AppProgress from './App.progress'; // Use progressive version
-import './styles.css';
+import App from './App'; // Switch back to main App
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './styles.css';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <AppProgress />
+    <App />
   </React.StrictMode>
 );
