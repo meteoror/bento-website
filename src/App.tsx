@@ -67,7 +67,7 @@ const App: React.FC = () => {
               <div className="d-flex justify-content-center">
                 <p> my chud children </p>
 
-                <div>
+                <div className="d-flex">
                   <a href="https://www.chickensmoothie.com/pet/503053035.html">
                     <img src="https://www.chickensmoothie.com/pet/503053035&trans=1.jpg"></img>
                   </a>
