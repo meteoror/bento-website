@@ -63,10 +63,32 @@ const App: React.FC = () => {
               <p>
                 i like griefer (blocktales) clonelin (collinlock16) and broker (phighting!) a Normal amount. i dont rlly like saying im nonsharing but i do yume them and am kind of insane about them on socials sometimes, i will prob moot u up if you like any of those medias (except phighting sorry the community sucks so ass) i also like bumblebee (transformers) subspace (phighting) ire (grace) and 007n7 (myth community)... i'm very open to new medias :-)
               </p>
-              <p> my chud son </p>
-              <a href="https://www.chickensmoothie.com/pet/503053035.html">
-                <img src="https://www.chickensmoothie.com/pet/503053035&trans=1.jpg"></img>
-              </a><b>Pet's name:</b> exemption <a href="https://www.chickensmoothie.com/">Adopt virtual pets at Chicken Smoothie!</a>
+
+              <div className="d-flex justify-content-center">
+                <p> my chud children </p>
+
+                <div>
+                  <a href="https://www.chickensmoothie.com/pet/503053035.html">
+                    <img src="https://www.chickensmoothie.com/pet/503053035&trans=1.jpg"></img>
+                  </a>
+
+                  <a href="https://www.chickensmoothie.com/pet/503053036.html">
+                    <img src="https://www.chickensmoothie.com/pet/503053036&trans=1.jpg"></img>
+                  </a>
+
+                  <a href="https://www.chickensmoothie.com/pet/503053037.html">
+                    <img src="https://www.chickensmoothie.com/pet/503053037&trans=1.jpg"></img>
+                  </a>
+
+                  <a href="https://www.chickensmoothie.com/pet/503053038.html">
+                    <img src="https://www.chickensmoothie.com/pet/503053038&trans=1.jpg"></img>
+                  </a>
+
+                  <a href="https://www.chickensmoothie.com/pet/503053039.html">
+                    <img src="https://www.chickensmoothie.com/pet/503053039&trans=1.jpg"></img>
+                  </a>
+                </div>
+              </div>
             </div>
           </section>
 
