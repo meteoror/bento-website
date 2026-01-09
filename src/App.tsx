@@ -68,16 +68,16 @@ const App: React.FC = () => {
 
               <div className="d-flex justify-content-center">
                 <div>
-                  <a href="https://www.chickensmoothie.com/pet/503053035.html">
-                    <img src="https://www.chickensmoothie.com/pet/503053035&trans=1.jpg"></img>
+                  <a href="https://www.chickensmoothie.com/pet/503060373.html">
+                    <img src="https://www.chickensmoothie.com/pet/503060373&trans=1.jpg"></img>
                   </a>
 
-                  <a href="https://www.chickensmoothie.com/pet/503053036.html">
-                    <img src="https://www.chickensmoothie.com/pet/503053036&trans=1.jpg"></img>
+                  <a href="https://www.chickensmoothie.com/pet/503060355.html">
+                    <img src="https://www.chickensmoothie.com/pet/503060355&trans=1.jpg"></img>
                   </a>
 
-                  <a href="https://www.chickensmoothie.com/pet/503053037.html">
-                    <img src="https://www.chickensmoothie.com/pet/503053037&trans=1.jpg"></img>
+                  <a href="https://www.chickensmoothie.com/pet/503060354.html">
+                    <img src="https://www.chickensmoothie.com/pet/503060354&trans=1.jpg"></img>
                   </a>
 
                   <a href="https://www.chickensmoothie.com/pet/503053038.html">
