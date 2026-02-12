@@ -63,33 +63,10 @@ const App: React.FC = () => {
               <p>
                 i like griefer (blocktales) clonelin (collinlock16) and broker (phighting!) a Normal amount. i dont rlly like saying im nonsharing but i do yume them and am kind of insane about them on socials sometimes, i will prob moot u up if you like any of those medias (except phighting sorry the community sucks so ass) i also like bumblebee (transformers) subspace (phighting) ire (grace) and 007n7 (myth community)... i'm very open to new medias :-)
               </p>
-              
-              <p> my chud children </p>
-
-              <div className="d-flex justify-content-center">
-                <div>
-                  <a href="https://www.chickensmoothie.com/pet/503060373.html">
-                    <img src="https://www.chickensmoothie.com/pet/503060373&trans=1.jpg"></img>
-                  </a>
-
-                  <a href="https://www.chickensmoothie.com/pet/503060355.html">
-                    <img src="https://www.chickensmoothie.com/pet/503060355&trans=1.jpg"></img>
-                  </a>
-
-                  <a href="https://www.chickensmoothie.com/pet/503060354.html">
-                    <img src="https://www.chickensmoothie.com/pet/503060354&trans=1.jpg"></img>
-                  </a>
-
-                  <a href="https://www.chickensmoothie.com/pet/503053038.html">
-                    <img src="https://www.chickensmoothie.com/pet/503053038&trans=1.jpg"></img>
-                  </a>
-
-                  <a href="https://www.chickensmoothie.com/pet/503053039.html">
-                    <img src="https://www.chickensmoothie.com/pet/503053039&trans=1.jpg"></img>
-                  </a>
-                </div>
-              </div>
             </div>
+
+<iframe id='kofiframe' src='https://ko-fi.com/91nevolt/?hidefeed=true&widget=true&embed=true&preview=true' style={{border:'none',width:'100%',padding:'4px',background:'#f9f9f9'}} height='712' title='91nevolt'></iframe>
+
           </section>
 
           {/* Skills Section */}
