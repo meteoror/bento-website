@@ -1,18 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import ResponseBox from './components/ResponseBox';
-import DrawingBox from './components/DrawingBox';
-import './styles.css';
+import React, { useState, useEffect } from "react";
+import ResponseBox from "./components/ResponseBox";
+import DrawingBox from "./components/DrawingBox";
+import "./styles.css";
 
 const App: React.FC = () => {
-  const [statusMessage, setStatusMessage] = useState('');
+  const [statusMessage, setStatusMessage] = useState("");
 
   // Add Bootstrap icons
   useEffect(() => {
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css';
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href =
+      "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css";
     document.head.appendChild(link);
-    
+
     return () => {
       const existingLink = document.querySelector(`link[href="${link.href}"]`);
       if (existingLink) document.head.removeChild(existingLink);
@@ -22,7 +23,7 @@ const App: React.FC = () => {
   // Clear status messages
   useEffect(() => {
     if (statusMessage) {
-      const timer = setTimeout(() => setStatusMessage(''), 3000);
+      const timer = setTimeout(() => setStatusMessage(""), 3000);
       return () => clearTimeout(timer);
     }
   }, [statusMessage]);
@@ -43,7 +44,9 @@ const App: React.FC = () => {
           <h1 className="matrix-title">
             <span className="matrix-cursor">_</span>
           </h1>
-          <p className="matrix-subtitle">hi! i'm 91nevolt but most people call me matrix</p>
+          <p className="matrix-subtitle">
+            hi! i'm 91nevolt but most people call me matrix
+          </p>
         </div>
       </header>
 
@@ -55,18 +58,51 @@ const App: React.FC = () => {
             <h2 className="section-title">about</h2>
             <div className="content-text">
               <p>
-                you can find me on twitter (and some other social media) @91nevolt and on discord @91ninevolt for contact!
+                you can find me on twitter (and some other social media)
+                @91nevolt and on discord @91ninevolt for contact!
               </p>
               <p>
-                some medias i enjoy areeee. blocktales and roblox in general, minecraft sometimes… i like mathematics a lot in the hobby way, and i like computers and pretty much anything related to them… heh. im objectum very proudly and also think of myself as computer-robot-dog ish but i'm not really one for labels and don't care to really look into it too much. i am me :-) i love music a lot, my taste fluctuates a lot – <a href="https://www.last.fm/user/meteoror" target="_blank" rel="noopener noreferrer" className="matrix-link">https://www.last.fm/user/meteoror</a> has more accurate stats!!
+                some medias i enjoy areeee. blocktales and roblox in general,
+                minecraft sometimes… i like mathematics a lot in the hobby way,
+                and i like computers and pretty much anything related to them…
+                heh. im objectum very proudly and also think of myself as
+                computer-robot-dog ish but i'm not really one for labels and
+                don't care to really look into it too much. i am me :-) i love
+                music a lot, my taste fluctuates a lot –{" "}
+                <a
+                  href="https://www.last.fm/user/meteoror"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="matrix-link"
+                >
+                  https://www.last.fm/user/meteoror
+                </a>{" "}
+                has more accurate stats!!
               </p>
               <p>
-                i like griefer (blocktales) clonelin (collinlock16) and broker (phighting!) a Normal amount. i dont rlly like saying im nonsharing but i do yume them and am kind of insane about them on socials sometimes, i will prob moot u up if you like any of those medias (except phighting sorry the community sucks so ass) i also like bumblebee (transformers) subspace (phighting) ire (grace) and 007n7 (myth community)... i'm very open to new medias :-)
+                i like griefer (blocktales) clonelin (collinlock16) and broker
+                (phighting!) a Normal amount. i dont rlly like saying im
+                nonsharing but i do yume them and am kind of insane about them
+                on socials sometimes, i will prob moot u up if you like any of
+                those medias (except phighting sorry the community sucks so ass)
+                i also like bumblebee (transformers) subspace (phighting) ire
+                (grace) and 007n7 (myth community)... i'm very open to new
+                medias :-)
               </p>
             </div>
 
-<iframe id='kofiframe' src='https://ko-fi.com/91nevolt/?hidefeed=true&widget=true&embed=true&preview=true' style={{border:'none',width:'100%',padding:'4px',background:'#f9f9f9'}} height='712' title='91nevolt'></iframe>
-
+            <iframe
+              id="kofiframe"
+              src="https://ko-fi.com/91nevolt/?hidefeed=true&widget=true&embed=true&preview=true"
+              style={{
+                border: "none",
+                width: "100%",
+                padding: "4px",
+                background: "#f9f9f9",
+              }}
+              height="712"
+              title="91nevolt"
+            ></iframe>
           </section>
 
           {/* Skills Section */}
@@ -74,7 +110,12 @@ const App: React.FC = () => {
             <h2 className="section-title">skills & interests</h2>
             <div className="content-text">
               <p>
-                i enjoy music and art; specifically, web design and 3d modeling; and i've pretty much tried every internet-related thing out there that there is! i can use touchdesigner, video editing software, and a lot of other softwares very well (just ask.) my commissions are always open and i can really do anything save for actual 2d art!
+                i enjoy music and art; specifically, web design and 3d modeling;
+                and i've pretty much tried every internet-related thing out
+                there that there is! i can use touchdesigner, video editing
+                software, and a lot of other softwares very well (just ask.) my
+                commissions are always open and i can really do anything save
+                for actual 2d art!
               </p>
             </div>
           </section>
@@ -96,7 +137,12 @@ const App: React.FC = () => {
       <footer className="portfolio-footer">
         <div className="container">
           <div className="social-links">
-            <a href="https://twitter.com/91nevolt" target="_blank" rel="noopener noreferrer" className="social-link">
+            <a
+              href="https://twitter.com/91nevolt"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="social-link"
+            >
               <i className="bi bi-twitter"></i> @91nevolt
             </a>
             <span className="separator">|</span>
@@ -107,7 +153,10 @@ const App: React.FC = () => {
 
       {/* Status Toast */}
       {statusMessage && (
-        <div className="toast-container position-fixed bottom-0 end-0 p-3" style={{ zIndex: 1050 }}>
+        <div
+          className="toast-container position-fixed bottom-0 end-0 p-3"
+          style={{ zIndex: 1050 }}
+        >
           <div className="toast show matrix-toast" role="alert">
             <div className="toast-body d-flex align-items-center text-success">
               <i className="bi bi-check-circle me-2"></i>
