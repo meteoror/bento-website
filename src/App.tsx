@@ -36,6 +36,29 @@ const App: React.FC = () => {
     setStatusMessage(message);
   };
 
+  useEffect(() => {
+  const script = document.createElement("script");
+  script.src = "https://storage.ko-fi.com/cdn/scripts/overlay-widget.js";
+  script.async = true;
+
+  script.onload = () => {
+    if ((window as any).kofiWidgetOverlay) {
+      (window as any).kofiWidgetOverlay.draw("91nevolt", {
+        type: "floating-chat",
+        "floating-chat.donateButton.text": "Support me",
+        "floating-chat.donateButton.background-color": "#00ff88", // match your theme
+        "floating-chat.donateButton.text-color": "#000"
+      });
+    }
+  };
+
+  document.body.appendChild(script);
+
+  return () => {
+    document.body.removeChild(script);
+  };
+}, []);
+
   return (
     <div className="portfolio-app">
       {/* Header */}
@@ -90,19 +113,6 @@ const App: React.FC = () => {
                 medias :-)
               </p>
             </div>
-
-            <iframe
-              id="kofiframe"
-              src="https://ko-fi.com/91nevolt/?hidefeed=true&widget=true&embed=true&preview=true"
-              style={{
-                border: "none",
-                width: "100%",
-                padding: "4px",
-                background: "#f9f9f9",
-              }}
-              height="712"
-              title="91nevolt"
-            ></iframe>
           </section>
 
           {/* Skills Section */}
