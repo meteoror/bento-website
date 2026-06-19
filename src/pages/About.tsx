@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ResponseBox from "../components/ResponseBox";
 import DrawingBox from "../components/DrawingBox";
-import "./styles.css";
+import "../styles.css";
 
 const App: React.FC = () => {
   const [statusMessage, setStatusMessage] = useState("");
