@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import ResponseBox from "../components/ResponseBox";
-import DrawingBox from "../components/DrawingBox";
 import "../styles.css";
 
 const App: React.FC = () => {
@@ -27,14 +25,6 @@ const App: React.FC = () => {
       return () => clearTimeout(timer);
     }
   }, [statusMessage]);
-
-  const handleMessageSent = (message: string) => {
-    setStatusMessage(message);
-  };
-
-  const handleDrawingSaved = (message: string) => {
-    setStatusMessage(message);
-  };
 
   useEffect(() => {
   const script = document.createElement("script");
@@ -78,7 +68,7 @@ const App: React.FC = () => {
         <div className="container">
           {/* About Section */}
           <section className="portfolio-section">
-            <h2 className="section-title">test</h2>
+            <h2 className="section-title">about</h2>
             <div className="content-text">
               <p>
                 you can find me on twitter (and some other social media)
@@ -130,16 +120,6 @@ const App: React.FC = () => {
             </div>
           </section>
 
-          {/* Visitor Interaction Section */}
-          <section className="portfolio-section">
-            <h2 className="section-title">leave a message</h2>
-            <ResponseBox onMessageSent={handleMessageSent} />
-          </section>
-
-          <section className="portfolio-section">
-            <h2 className="section-title">draw something</h2>
-            <DrawingBox onDrawingSaved={handleDrawingSaved} />
-          </section>
         </div>
       </main>
 
