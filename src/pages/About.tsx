@@ -78,7 +78,7 @@ const App: React.FC = () => {
         <div className="container">
           {/* About Section */}
           <section className="portfolio-section">
-            <h2 className="section-title">about</h2>
+            <h2 className="section-title">test</h2>
             <div className="content-text">
               <p>
                 you can find me on twitter (and some other social media)
