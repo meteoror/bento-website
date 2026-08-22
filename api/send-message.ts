@@ -1,5 +1,9 @@
-import { put } from '@vercel/blob';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
+
+const GITHUB_TOKEN = process.env.GITHUB_TOKEN!;
+const GITHUB_OWNER = process.env.GITHUB_OWNER!;
+const GITHUB_REPO = process.env.GITHUB_STORAGE_REPO!;
+const GITHUB_BRANCH = process.env.GITHUB_BRANCH || 'main';
 
 export default async function handler(
   req: VercelRequest,
@@ -28,19 +32,37 @@ export default async function handler(
 
     // Create content with timestamp and message
     const content = `Timestamp: ${now.toISOString()}\n\nMessage:\n${message}`;
+    const contentBase64 = Buffer.from(content, 'utf-8').toString('base64');
 
-    // Change filename to .txt and content type to text/plain
-    const blob = await put(
-      `messages/${year}/${month}/${year}-${month}-${day}_${hours}-${minutes}-${seconds}-${milliseconds}.txt`,
-      content,
-      { 
-        access: 'public',
-        contentType: 'text/plain'  // Changed from application/json
+    const path = `messages/${year}/${month}/${year}-${month}-${day}_${hours}-${minutes}-${seconds}-${milliseconds}.txt`;
+
+    const ghRes = await fetch(
+      `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${path}`,
+      {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${GITHUB_TOKEN}`,
+          Accept: 'application/vnd.github+json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: `Add message ${path}`,
+          content: contentBase64,
+          branch: GITHUB_BRANCH,
+        }),
       }
     );
 
-    return res.status(200).json({ url: blob.url });
-    
+    if (!ghRes.ok) {
+      const errText = await ghRes.text();
+      console.error('GitHub upload failed:', ghRes.status, errText);
+      return res.status(500).json({ error: 'Failed to save message' });
+    }
+
+    const data = await ghRes.json();
+
+    return res.status(200).json({ url: data.content?.download_url });
+
   } catch (error) {
     console.error('Error uploading message:', error);
     return res.status(500).json({ error: 'Failed to save message' });
