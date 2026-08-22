@@ -11,16 +11,24 @@ interface GalleryItem {
 }
 
 function formatTimestamp(raw: string): string {
-  // raw looks like 2026-08-06_14-23-01-123
   const match = raw.match(/(\d{4})-(\d{2})-(\d{2})_(\d{2})-(\d{2})-(\d{2})/);
   if (!match) return raw;
-  const [, y, m, d, h, min] = match;
+  const [, y, m, d, h, min, s] = match;
 
-  const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-  const hourNum = parseInt(h, 10);
-  const ampm = hourNum >= 12 ? "PM" : "AM";
-  const hour12 = hourNum % 12 || 12;
-  return `${monthNames[parseInt(m, 10) - 1]} ${parseInt(d, 10)}, ${y} ${hour12}:${min} ${ampm}`;
+  // filename's numbers are UTC (Vercel's server clock)
+  const utcDate = new Date(Date.UTC(
+    parseInt(y), parseInt(m) - 1, parseInt(d),
+    parseInt(h), parseInt(min), parseInt(s || "0")
+  ));
+
+  // browser convert that UTC instant into the viewer's local time
+  return utcDate.toLocaleString(undefined, {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  });
 }
 
 const Gallery: React.FC = () => {
