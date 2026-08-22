@@ -280,12 +280,12 @@ const DrawingBox: React.FC<DrawingBoxProps> = ({ onDrawingSaved }) => {
             {isSaving ? (
               <>
                 <span className="spinner-border spinner-border-sm me-2"></span>
-                saving...
+                sending...
               </>
             ) : (
               <>
-                <i className="bi bi-download me-2"></i>
-                save
+                <i className="bi bi-send me-2"></i>
+                send
               </>
             )}
           </button>

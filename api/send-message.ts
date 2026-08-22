@@ -20,7 +20,6 @@ export default async function handler(
       return res.status(400).json({ error: 'Message is required' });
     }
 
-    // Create formatted date for filename
     const now = new Date();
     const year = now.getFullYear();
     const month = String(now.getMonth() + 1).padStart(2, '0');
@@ -30,11 +29,8 @@ export default async function handler(
     const seconds = String(now.getSeconds()).padStart(2, '0');
     const milliseconds = String(now.getMilliseconds()).padStart(3, '0');
 
-    // Create content with timestamp and message
-    const content = `Timestamp: ${now.toISOString()}\n\nMessage:\n${message}`;
-    const contentBase64 = Buffer.from(content, 'utf-8').toString('base64');
-
     const path = `messages/${year}/${month}/${year}-${month}-${day}_${hours}-${minutes}-${seconds}-${milliseconds}.txt`;
+    const contentBase64 = Buffer.from(message, 'utf-8').toString('base64');
 
     const ghRes = await fetch(
       `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${path}`,

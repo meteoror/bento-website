@@ -15,7 +15,12 @@ function formatTimestamp(raw: string): string {
   const match = raw.match(/(\d{4})-(\d{2})-(\d{2})_(\d{2})-(\d{2})-(\d{2})/);
   if (!match) return raw;
   const [, y, m, d, h, min] = match;
-  return `${y}-${m}-${d} ${h}:${min}`;
+
+  const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  const hourNum = parseInt(h, 10);
+  const ampm = hourNum >= 12 ? "PM" : "AM";
+  const hour12 = hourNum % 12 || 12;
+  return `${monthNames[parseInt(m, 10) - 1]} ${parseInt(d, 10)}, ${y} ${hour12}:${min} ${ampm}`;
 }
 
 const Gallery: React.FC = () => {
@@ -55,7 +60,7 @@ const Gallery: React.FC = () => {
           <h1 className="matrix-title">
             gallery<span className="matrix-cursor">_</span>
           </h1>
-          <p className="matrix-subtitle">everything sent in, newest first</p>
+          <p className="matrix-subtitle">my files!!!!</p>
         </div>
       </header>
 
