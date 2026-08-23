@@ -4,6 +4,7 @@ const GITHUB_TOKEN = process.env.GITHUB_TOKEN!;
 const GITHUB_OWNER = process.env.GITHUB_OWNER!;
 const GITHUB_REPO = process.env.GITHUB_STORAGE_REPO!;
 const GITHUB_BRANCH = process.env.GITHUB_BRANCH || 'main';
+const GALLERY_PASSWORD = process.env.GALLERY_PASSWORD;
 
 const ghHeaders = {
   Authorization: `Bearer ${GITHUB_TOKEN}`,
@@ -22,6 +23,20 @@ export default async function handler(
 ) {
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  // --- Password check ---
+  // GALLERY_PASSWORD lives only as a Vercel env var - never hardcode it here,
+  // since this file lives in your public site repo.
+  if (!GALLERY_PASSWORD) {
+    console.error('GALLERY_PASSWORD env var is not set');
+    return res.status(500).json({ error: 'Server misconfigured' });
+  }
+
+  const provided = req.headers['x-gallery-password'];
+
+  if (!provided || provided !== GALLERY_PASSWORD) {
+    return res.status(401).json({ error: 'Incorrect password' });
   }
 
   try {
