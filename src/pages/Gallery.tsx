@@ -102,7 +102,7 @@ const Gallery: React.FC = () => {
           <h1 className="matrix-title">
             gallery<span className="matrix-cursor">_</span>
           </h1>
-          <p className="matrix-subtitle">everything sent in, newest first</p>
+          <p className="matrix-subtitle">YOUR files!!!</p>
         </div>
       </header>
 
