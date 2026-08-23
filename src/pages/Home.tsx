@@ -81,10 +81,6 @@ const App: React.FC = () => {
             <h2 className="section-title">about</h2>
             <div className="content-text">
               <p>
-                you can find me on twitter (and some other social media)
-                @91nevolt and on discord @91ninevolt for contact!
-              </p>
-              <p>
                 some medias i enjoy areeee. blocktales, outlast trials,
                 and transformers... i produce music pretty much exclusively in my free time (though i rap sometimes too)
                 and i like computers and pretty much anything related to them as well :-)
@@ -98,15 +94,15 @@ const App: React.FC = () => {
                   className="matrix-link"
                 >
                   https://www.last.fm/user/meteoror
-                </a>{" "}
-                has more accurate stats!!
+                </a>{" "} has more accurate stats!!
               </p>
               <p>
                 i like griefer (blocktales) and broker
                 (phighting!) a Normal amount. i am kind of insane about them
-                on socials sometimes, i will prob moot u up if you like any of
-                those medias (except phighting sorry the community sucks so ass)
-                i also like bumblebee (transformers) subspace (phighting) and 007n7 (myth community)... among others i cant b assed to remember right now
+                on socials sometimes.Heh.  
+                i also like bumblebee (transformers) subspace (phighting) and 007n7 (myth community)... 
+                among others i cant b assed to remember right now!! i will prob moot u up if you like any of
+                those medias (except phighting sorry the community sucks so ass 90% of the time)
               </p>
             </div>
           </section>
