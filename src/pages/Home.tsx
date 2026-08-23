@@ -93,13 +93,13 @@ const App: React.FC = () => {
                   rel="noopener noreferrer"
                   className="matrix-link"
                 >
-                  https://www.last.fm/user/meteoror
+                  my last.fm
                 </a>{" "} has more accurate stats!!
               </p>
               <p>
                 i like griefer (blocktales) and broker
                 (phighting!) a Normal amount. i am kind of insane about them
-                on socials sometimes.Heh.  
+                on socials sometimes. Heh.  
                 i also like bumblebee (transformers) subspace (phighting) and 007n7 (myth community)... 
                 among others i cant b assed to remember right now!! i will prob moot u up if you like any of
                 those medias (except phighting sorry the community sucks so ass 90% of the time)
