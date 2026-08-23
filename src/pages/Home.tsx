@@ -86,14 +86,14 @@ const App: React.FC = () => {
                 and i like computers and pretty much anything related to them as well :-)
                 im objectum very proudly and also think of myself as
                 computer-robot-dog ish but i'm not really one for labels and
-                don't care to really look into it too much. my music taste fluctuates a lot –{" "}
+                don't care to really look into it too much. my music taste fluctuates a lot – my{" "}
                 <a
                   href="https://www.last.fm/user/meteoror"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="matrix-link"
                 >
-                  my last.fm
+                  last.fm
                 </a>{" "} has more accurate stats!!
               </p>
               <p>
