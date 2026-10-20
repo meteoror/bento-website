@@ -5,7 +5,7 @@ import DrawingBox from "../components/DrawingBox";
 const App: React.FC = () => {
   const [statusMessage, setStatusMessage] = useState("");
 
-  // Clear status messages
+  // hide submission feedback after a short delay
   useEffect(() => {
     if (statusMessage) {
       const timer = setTimeout(() => setStatusMessage(""), 3000);
@@ -17,13 +17,14 @@ const App: React.FC = () => {
     setStatusMessage(message);
   };
 
+  // use the same page feedback for drawings and messages
   const handleDrawingSaved = (message: string) => {
     setStatusMessage(message);
   };
 
   return (
     <div className="portfolio-app">
-      {/* Header */}
+      {/* page introduction */}
       <header className="portfolio-header">
         <div className="container">
           <h1 className="matrix-title">
@@ -35,10 +36,10 @@ const App: React.FC = () => {
         </div>
       </header>
 
-      {/* Main Content */}
+      {/* profile and visitor features */}
       <main className="portfolio-main">
         <div className="container">
-          {/* About Section */}
+          {/* personal introduction */}
           <section className="portfolio-section">
             <h2 className="section-title">about</h2>
             <div className="content-text">
@@ -69,7 +70,7 @@ const App: React.FC = () => {
             </div>
           </section>
 
-          {/* Skills Section */}
+          {/* creative interests */}
           <section className="portfolio-section">
             <h2 className="section-title">skills & interests</h2>
             <div className="content-text">
@@ -84,7 +85,7 @@ const App: React.FC = () => {
             </div>
           </section>
 
-          {/* Visitor Interaction Section */}
+          {/* visitor message form */}
           <section className="portfolio-section">
             <h2 className="section-title">leave a message</h2>
             <ResponseBox onMessageSent={handleMessageSent} />
@@ -97,7 +98,7 @@ const App: React.FC = () => {
         </div>
       </main>
 
-      {/* Footer */}
+      {/* social links */}
       <footer className="portfolio-footer">
         <div className="container">
           <div className="social-links">
@@ -115,7 +116,7 @@ const App: React.FC = () => {
         </div>
       </footer>
 
-      {/* Status Toast */}
+      {/* show feedback after a visitor submits content */}
       {statusMessage && (
         <div
           className="toast-container position-fixed bottom-0 end-0 p-3"

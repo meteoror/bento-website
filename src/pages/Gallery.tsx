@@ -11,6 +11,7 @@ interface GalleryItem {
 
 const SESSION_KEY = "gallery-password";
 
+// turn the date in each filename into a readable label
 function formatTimestamp(raw: string): string {
   const match = raw.match(/(\d{4})-(\d{2})-(\d{2})_(\d{2})-(\d{2})-(\d{2})/);
   if (!match) return raw;
@@ -21,6 +22,7 @@ function formatTimestamp(raw: string): string {
     parseInt(h), parseInt(min), parseInt(s || "0")
   ));
 
+  // show the filename date in the visitor's local time
   return utcDate.toLocaleString(undefined, {
     month: "short",
     day: "numeric",
@@ -41,6 +43,7 @@ const Gallery: React.FC = () => {
   const [passwordInput, setPasswordInput] = useState("");
   const [authError, setAuthError] = useState("");
 
+  // verify the password with the server before showing private files
   const loadGallery = async (password: string) => {
     setLoading(true);
     setError("");
@@ -52,6 +55,7 @@ const Gallery: React.FC = () => {
       });
 
       if (res.status === 401) {
+        // discard a saved password that the server no longer accepts
         setAuthed(false);
         setAuthError("Wrong password.");
         sessionStorage.removeItem(SESSION_KEY);
@@ -65,6 +69,7 @@ const Gallery: React.FC = () => {
       const data = await res.json();
       setItems(data.items || []);
       setAuthed(true);
+      // keep access only for the current browser session
       sessionStorage.setItem(SESSION_KEY, password);
     } catch (err) {
       console.error(err);
@@ -76,7 +81,7 @@ const Gallery: React.FC = () => {
     }
   };
 
-  // On first load, try a password saved earlier this browser session
+  // restore gallery access from this browser session
   useEffect(() => {
     const saved = sessionStorage.getItem(SESSION_KEY);
     if (saved) {
@@ -92,6 +97,7 @@ const Gallery: React.FC = () => {
     loadGallery(passwordInput);
   };
 
+  // show every item or just the selected content type
   const filtered = items.filter((i) => filter === "all" || i.type === filter);
 
   return (

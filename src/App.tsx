@@ -5,6 +5,7 @@ import About from './pages/About'
 import Gallery from './pages/Gallery'
 
 export default function App() {
+  // load shared icons and the support widget once for every route
   useEffect(() => {
     const iconStylesheet = document.createElement('link')
     iconStylesheet.rel = 'stylesheet'
@@ -12,6 +13,7 @@ export default function App() {
       'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css'
     document.head.appendChild(iconStylesheet)
 
+    // wait for ko fi to load before creating its floating support button
     const widgetScript = document.createElement('script')
     widgetScript.src = 'https://storage.ko-fi.com/cdn/scripts/overlay-widget.js'
     widgetScript.async = true
@@ -33,6 +35,7 @@ export default function App() {
     }
     document.body.appendChild(widgetScript)
 
+    // remove the stylesheet and script when the app unmounts
     return () => {
       iconStylesheet.remove()
       widgetScript.remove()
@@ -40,6 +43,7 @@ export default function App() {
   }, [])
 
   return (
+    // match each url to its page component
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/about" element={<About />} />

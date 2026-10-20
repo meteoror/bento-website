@@ -8,8 +8,10 @@ const ResponseBox: React.FC<ResponseBoxProps> = ({ onMessageSent }) => {
   const [message, setMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // send a visitor message and report the result to the page
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    // ignore blank submissions even if the handler is triggered directly
     if (!message.trim()) return;
 
     setIsSubmitting(true);
@@ -30,6 +32,7 @@ const ResponseBox: React.FC<ResponseBoxProps> = ({ onMessageSent }) => {
     }
   };
 
+  // cap visitor messages at the same limit shown beside the form
   return (
     <div className="portfolio-box">
       <form onSubmit={handleSubmit} className="d-flex flex-column">

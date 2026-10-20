@@ -13,7 +13,7 @@ const DrawingBox: React.FC<DrawingBoxProps> = ({ onDrawingSaved }) => {
   const [isSaving, setIsSaving] = useState(false);
   const [lastPos, setLastPos] = useState<{ x: number; y: number } | null>(null);
 
-  // Initialize canvas
+  // size the canvas and prepare its drawing context
   useEffect(() => {
     const canvas = canvasRef.current;
     const container = containerRef.current;
@@ -24,10 +24,11 @@ const DrawingBox: React.FC<DrawingBoxProps> = ({ onDrawingSaved }) => {
 
     const resizeCanvas = () => {
       const rect = container.getBoundingClientRect();
+      // canvas dimensions use pixels rather than css sizing
       canvas.width = rect.width;
       canvas.height = Math.max(300, rect.height);
       
-      // Set styles
+      // reset the canvas after its dimensions change
       ctx.fillStyle = '#000000';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       ctx.lineCap = 'round';
@@ -36,7 +37,7 @@ const DrawingBox: React.FC<DrawingBoxProps> = ({ onDrawingSaved }) => {
       ctx.strokeStyle = brushColor;
     };
 
-    // Use ResizeObserver for better container tracking
+    // resize the canvas whenever its container changes
     const resizeObserver = new ResizeObserver(resizeCanvas);
     resizeObserver.observe(container);
     
@@ -47,7 +48,7 @@ const DrawingBox: React.FC<DrawingBoxProps> = ({ onDrawingSaved }) => {
     };
   }, []);
 
-  // Update brush styles
+  // apply the selected brush settings to the canvas
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -59,6 +60,7 @@ const DrawingBox: React.FC<DrawingBoxProps> = ({ onDrawingSaved }) => {
     ctx.strokeStyle = brushColor;
   }, [brushSize, brushColor]);
 
+  // convert screen positions into canvas positions
   const getCanvasCoordinates = (clientX: number, clientY: number) => {
     const canvas = canvasRef.current;
     if (!canvas) return { x: 0, y: 0 };
@@ -79,6 +81,7 @@ const DrawingBox: React.FC<DrawingBoxProps> = ({ onDrawingSaved }) => {
 
     const { x, y } = getCanvasCoordinates(clientX, clientY);
     
+    // begin a fresh stroke at the pointer position
     ctx.beginPath();
     ctx.moveTo(x, y);
     setIsDrawing(true);
@@ -94,6 +97,7 @@ const DrawingBox: React.FC<DrawingBoxProps> = ({ onDrawingSaved }) => {
 
     const { x, y } = getCanvasCoordinates(clientX, clientY);
     
+    // connect the previous point to draw a continuous stroke
     ctx.beginPath();
     ctx.moveTo(lastPos.x, lastPos.y);
     ctx.lineTo(x, y);
@@ -103,11 +107,12 @@ const DrawingBox: React.FC<DrawingBoxProps> = ({ onDrawingSaved }) => {
   };
 
   const stopDrawing = () => {
+    // clear the active stroke so the next drag starts separately
     setIsDrawing(false);
     setLastPos(null);
   };
 
-  // Mouse event handlers
+  // translate mouse input into canvas drawing actions
   const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
     startDrawing(e.clientX, e.clientY);
   };
@@ -117,25 +122,26 @@ const DrawingBox: React.FC<DrawingBoxProps> = ({ onDrawingSaved }) => {
     draw(e.clientX, e.clientY);
   };
 
-  // Touch event handlers
+  // prevent touch gestures from scrolling while drawing
   const handleTouchStart = (e: React.TouchEvent<HTMLCanvasElement>) => {
-    e.preventDefault(); // Prevent scrolling and highlighting
+    e.preventDefault();
     const touch = e.touches[0];
     startDrawing(touch.clientX, touch.clientY);
   };
 
   const handleTouchMove = (e: React.TouchEvent<HTMLCanvasElement>) => {
-    e.preventDefault(); // Prevent scrolling
+    e.preventDefault();
     if (!isDrawing) return;
     const touch = e.touches[0];
     draw(touch.clientX, touch.clientY);
   };
 
   const handleTouchEnd = (e: React.TouchEvent<HTMLCanvasElement>) => {
-    e.preventDefault(); // Prevent tap highlight
+    e.preventDefault();
     stopDrawing();
   };
 
+  // upload the finished image and show feedback on the page
   const handleSave = async () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -145,6 +151,7 @@ const DrawingBox: React.FC<DrawingBoxProps> = ({ onDrawingSaved }) => {
     try {
       const dataUrl = canvas.toDataURL('image/png');
 
+      // send the canvas image as a png data url
       await fetch('/api/upload-drawing', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -159,6 +166,7 @@ const DrawingBox: React.FC<DrawingBoxProps> = ({ onDrawingSaved }) => {
     }
   };
 
+  // restore the canvas background without changing brush settings
   const handleClear = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -183,12 +191,12 @@ const DrawingBox: React.FC<DrawingBoxProps> = ({ onDrawingSaved }) => {
       >
         <canvas
           ref={canvasRef}
-          // Mouse events
+          // handle drawing with a mouse
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
           onMouseUp={stopDrawing}
           onMouseLeave={stopDrawing}
-          // Touch events
+          // support drawing on touch screens
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
@@ -197,9 +205,9 @@ const DrawingBox: React.FC<DrawingBoxProps> = ({ onDrawingSaved }) => {
         />
       </div>
 
-      {/* Tools */}
+      {/* drawing tools */}
       <div className="border-top" style={{ borderColor: 'rgba(0, 255, 136, 0.2)', paddingTop: '1rem' }}>
-        {/* Color Picker & Brush Size */}
+        {/* brush color and size controls */}
         <div className="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
           <div className="d-flex align-items-center gap-2">
             <small style={{ color: 'var(--text-secondary)' }}>colors:</small>
@@ -253,7 +261,7 @@ const DrawingBox: React.FC<DrawingBoxProps> = ({ onDrawingSaved }) => {
           </div>
         </div>
 
-        {/* Action Buttons */}
+        {/* clear the canvas or send the drawing */}
         <div className="d-flex justify-content-between gap-2">
           <button
             onClick={handleClear}

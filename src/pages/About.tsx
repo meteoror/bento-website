@@ -2,8 +2,9 @@ import React from "react";
 
 const App: React.FC = () => {
   return (
+    // this page contains profile information without visitor forms
     <div className="portfolio-app">
-      {/* Header */}
+      {/* page introduction */}
       <header className="portfolio-header">
         <div className="container">
           <h1 className="matrix-title">
@@ -15,10 +16,10 @@ const App: React.FC = () => {
         </div>
       </header>
 
-      {/* Main Content */}
+      {/* profile details */}
       <main className="portfolio-main">
         <div className="container">
-          {/* About Section */}
+          {/* personal introduction */}
           <section className="portfolio-section">
             <h2 className="section-title">about</h2>
             <div className="content-text">
@@ -57,7 +58,7 @@ const App: React.FC = () => {
             </div>
           </section>
 
-          {/* Skills Section */}
+          {/* creative interests */}
           <section className="portfolio-section">
             <h2 className="section-title">skills & interests</h2>
             <div className="content-text">
@@ -75,7 +76,7 @@ const App: React.FC = () => {
         </div>
       </main>
 
-      {/* Footer */}
+      {/* social links */}
       <footer className="portfolio-footer">
         <div className="container">
           <div className="social-links">
