@@ -1,24 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import ResponseBox from "../components/ResponseBox";
 import DrawingBox from "../components/DrawingBox";
-import "../styles.css";
 
 const App: React.FC = () => {
   const [statusMessage, setStatusMessage] = useState("");
-
-  // Add Bootstrap icons
-  useEffect(() => {
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href =
-      "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css";
-    document.head.appendChild(link);
-
-    return () => {
-      const existingLink = document.querySelector(`link[href="${link.href}"]`);
-      if (existingLink) document.head.removeChild(existingLink);
-    };
-  }, []);
 
   // Clear status messages
   useEffect(() => {
@@ -35,29 +20,6 @@ const App: React.FC = () => {
   const handleDrawingSaved = (message: string) => {
     setStatusMessage(message);
   };
-
-  useEffect(() => {
-  const script = document.createElement("script");
-  script.src = "https://storage.ko-fi.com/cdn/scripts/overlay-widget.js";
-  script.async = true;
-
-  script.onload = () => {
-    if ((window as any).kofiWidgetOverlay) {
-      (window as any).kofiWidgetOverlay.draw("91nevolt", {
-        type: "floating-chat",
-        "floating-chat.donateButton.text": "Support me",
-        "floating-chat.donateButton.background-color": "#00ff88", // match your theme
-        "floating-chat.donateButton.text-color": "#000"
-      });
-    }
-  };
-
-  document.body.appendChild(script);
-
-  return () => {
-    document.body.removeChild(script);
-  };
-}, []);
 
   return (
     <div className="portfolio-app">

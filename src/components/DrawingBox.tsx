@@ -179,10 +179,7 @@ const DrawingBox: React.FC<DrawingBoxProps> = ({ onDrawingSaved }) => {
       <div 
         ref={containerRef} 
         className="canvas-container mb-3"
-        style={{ 
-          minHeight: '300px',
-          touchAction: 'none' // Prevent browser touch actions
-        }}
+        style={{ touchAction: 'none' }}
       >
         <canvas
           ref={canvasRef}
@@ -196,13 +193,7 @@ const DrawingBox: React.FC<DrawingBoxProps> = ({ onDrawingSaved }) => {
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
           onTouchCancel={handleTouchEnd}
-          style={{
-            cursor: 'crosshair',
-            touchAction: 'none', // Prevent default touch behaviors
-            width: '100%',
-            height: '100%',
-            display: 'block'
-          }}
+          style={{ touchAction: 'none' }}
         />
       </div>
 
